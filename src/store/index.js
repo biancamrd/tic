@@ -2,6 +2,7 @@ import { createStore } from "vuex";
 import axios from "axios";
 import { auth } from "../../firebaseConfig";
 import getAxiosConfig from "../services/firebaseService";
+import { API_BASE_URL } from "../services/config";
 
 const store = createStore({
   state: {
@@ -66,7 +67,7 @@ const store = createStore({
       try {
         const config = await getAxiosConfig();
         await axios.delete(
-          `http://localhost:3000/currentBooks/${book.id}`,
+          `${API_BASE_URL}/currentBooks/${book.id}`,
           config
         );
         commit("DELETE_BOOK_FROM_AUTHOR", book.id);
@@ -87,7 +88,7 @@ const store = createStore({
       try {
         const config = await getAxiosConfig();
         const response = await axios.post(
-          "http://localhost:3000/authors",
+          `${API_BASE_URL}/authors`,
           {
             name,
             user_id,
@@ -111,7 +112,7 @@ const store = createStore({
     },
     async fetchAuthors(context, { userId }) {
       try {
-        const response = await axios.get(`http://localhost:3000/authors`, {
+        const response = await axios.get(`${API_BASE_URL}/authors`, {
           params: { user_id: userId },
         });
 
@@ -125,7 +126,7 @@ const store = createStore({
       try {
         const config = await getAxiosConfig();
         const response = await axios.post(
-          "http://localhost:3000/books",
+          `${API_BASE_URL}/books`,
           {
             title,
             description,
@@ -149,7 +150,7 @@ const store = createStore({
       try {
         commit("SET_EDITED_AUTHOR", author);
         const config = await getAxiosConfig();
-        await axios.put(`http://localhost:3000/authors/${author.id}`, author, config);
+        await axios.put(`${API_BASE_URL}/authors/${author.id}`, author, config);
         const updatedAuthors = state.authors.map((a) =>
           a.id === author.id ? state.editedAuthor : a
         );
@@ -162,7 +163,7 @@ const store = createStore({
       try {
         const config = await getAxiosConfig();
         await axios.delete(
-          `http://localhost:3000/authors/${author.id}`,
+          `${API_BASE_URL}/authors/${author.id}`,
           config
         );
         commit("DELETE_AUTHOR", author.id);
@@ -180,7 +181,7 @@ const store = createStore({
         commit("SET_EDITED_BOOK", book);
         const config = await getAxiosConfig();
         await axios.put(
-          `http://localhost:3000/books/${book.id}`,
+          `${API_BASE_URL}/books/${book.id}`,
           book,
           config
         );
@@ -199,7 +200,7 @@ const store = createStore({
       try {
         const config = await getAxiosConfig();
         await axios.delete(
-          `http://localhost:3000/books/${book.id}`,
+          `${API_BASE_URL}/books/${book.id}`,
           config
         );
         commit("DELETE_BOOK", book.id);
@@ -212,7 +213,7 @@ const store = createStore({
     },
     async fetchBooks(context, { userId }) {
       try {
-        const response = await axios.get(`http://localhost:3000/books`, {
+        const response = await axios.get(`${API_BASE_URL}/books`, {
           params: { user_id: userId },
         });
 
@@ -227,7 +228,7 @@ const store = createStore({
   
   async getBookDetails({ commit }, bookId) {
     try {
-      const response = await axios.get(`http://localhost:3000/books/${bookId}`);
+      const response = await axios.get(`${API_BASE_URL}/books/${bookId}`);
       const bookDetails = response.data;
       commit("SET_BOOK_DETAILS", bookDetails);
     } catch (error) {
