@@ -52,6 +52,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import axios from "axios";
 import getAxiosConfig from "../services/firebaseService";
+import { API_BASE_URL } from "../services/config";
 
 export default {
   data() {
@@ -83,7 +84,7 @@ export default {
         const user = auth.currentUser;
         await updateProfile(user, { displayName: this.registerName });
         const config = await getAxiosConfig();
-        await axios.post("http://localhost:3000/generate-data", { user_id: auth.currentUser.uid }, config);
+        await axios.post(`${API_BASE_URL}/generate-data`, { user_id: auth.currentUser.uid }, config);
         this.$store.dispatch("fetchAuthors", { userId: auth.currentUser.uid });
         this.$store.dispatch("fetchBooks", { userId: auth.currentUser.uid });
       } catch (error) {
